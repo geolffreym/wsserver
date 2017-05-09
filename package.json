@@ -1,0 +1,87 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "b_wsserver",
+        "scope": null,
+        "escapedName": "b_wsserver",
+        "name": "b_wsserver",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/home/gmena/WebstormProjects/libs"
+    ]
+  ],
+  "_from": "b_wsserver@latest",
+  "_id": "b_wsserver@0.1.2",
+  "_inCache": true,
+  "_location": "/b_wsserver",
+  "_npmUser": {
+    "name": "gmena",
+    "email": "gmjun2000@gmail.com"
+  },
+  "_npmVersion": "1.4.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "b_wsserver",
+    "scope": null,
+    "escapedName": "b_wsserver",
+    "name": "b_wsserver",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/b_wsserver/-/b_wsserver-0.1.2.tgz",
+  "_shasum": "0fa68a3ed96bcb74b4c44a554f46c1717ee201bb",
+  "_shrinkwrap": null,
+  "_spec": "b_wsserver",
+  "_where": "/home/gmena/WebstormProjects/libs",
+  "author": {
+    "name": "Geolffrey Mena",
+    "email": "gmjun2000@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/geolffreym/_B_Node/issues"
+  },
+  "dependencies": {
+    "websocket": ">=1.0.8"
+  },
+  "description": "WebSocket Server",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "0fa68a3ed96bcb74b4c44a554f46c1717ee201bb",
+    "tarball": "https://registry.npmjs.org/b_wsserver/-/b_wsserver-0.1.2.tgz"
+  },
+  "engines": {
+    "node": ">= 0.10.x"
+  },
+  "homepage": "https://github.com/geolffreym/_B_Node#readme",
+  "keywords": [
+    "websocket"
+  ],
+  "license": "GNU GPL v3.0",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "gmena",
+      "email": "gmjun2000@gmail.com"
+    }
+  ],
+  "name": "b_wsserver",
+  "optionalDependencies": {},
+  "readme": "Websocket Server\n=========================\nConnection manager using socket, protocol management, customers and managers. \n\nUsage\n------\n\nWebsocket Usage:\n\nThe manager needs to get through a query string, the administrator, the user and the protocol. \nThis to generate a separate structure for each service provided by each protocol, you can use different protocols with different users and Administradors. A tree structure is generated. \nexample: \n\n    {protocol} ->  {admin}  -> {client}\n                            -> {client2}  \n                            -> {client3}  \n                   {admin2} -> {client1} \n                            -> {client2} \n                           \n    {protocol2} -> {admin}  -> {client}\n                            -> {client2}  \n                            -> {client3}  \n                   {admin2} -> {client1} \n                            -> {client2} \n\nThis makes it much easier to manage the behavior of each service, without affecting each other. \nYou can shut down one service, keeping active the other services without problem. \n\n[Syrup](https://github.com/geolffreym/Syrup) is part of this implementation and has the tools necessary for the operation of this service.\n\nThe default values ​​for the protocol is 'default' for the customer is 'default' and the manager is 'temp'\n\nServer Side\n-----------\n```js\nvar _http = require('http'),\n    _wsServer = require('b_wsserver');\n\n/**Http Server\n * @type {*}\n * @private\n */\n_server = _http.createServer(function (request, response) {\n\n}).listen(_webServerPort, function () {\n    console.log(\"Listening on Port \" + _webServerPort);\n});\n\n\n/**wsSocket Server\n * @type {_wsServer}\n * @private\n */\n_wsServer = new _wsServer(_server);\n\n//You need to check the connections come from a valid client\n_wsServer.setMyHost('mydomain.com');\n\n//Events Handler\n_wsServer.on('message', function (message) {\n    //The native MESSAGE functions are executed automatically\n    \n    //Extra Control\n    //On receive messages what to do?\n});\n\n_wsServer.on('close', function (message) {\n       //The native CLOSE functions are executed automatically\n    \n       //Extra Control\n       //On socket close what to do?\n});\n  \n_wsServer.on('error', function (message) {\n      //The native ERROR functions are executed automatically\n    \n      //Extra Control\n      //On socket error what to do?\n});\n\n//Run Server\n_wsServer.run();\n   \n```\n\nClient Side\n----------\n\n```js    \n//Creating Connections \n\nvar _socket  = new WebSocket('ws://MY_URL'?admin=mike&user=carl&protocol=chat);\n\nThe administrator is validated and created, when user == admin in the server:\n\n    ?admin=mike&user=mike&protocol=chat\n    \nif you do not need a administrator just:\n\n    ?user=mike&protocol=chat\n\n// When the connection is open, send some data to the server\n\n_socket.onopen = function () {\n        //Sending Message\n        _socket.send(JSON.stringify({\n                        to : 'carl', //Receipt\n                        protocol : 'chat', // Opened Protocol\n                        message : 'Hi' // Message\n                    })); \n};\n\n// Log errors\n_socket.onerror = function (error) {\n  console.log('WebSocket Error ' + error);\n};\n\n// Log messages from the server\n_socket.onmessage = function (e) {\n  console.log('Server: ' + e.data);\n};\n\n```\n\n\nUsing Syrup\n----------\n\n*Complex Process*\n```js\n\n var _socket = new Socket;\n \n _socket.set(\n     {\n        user: 'Mike', // My local User\n        protocol: 'chat', // The protocol\n        port: '8080' // Optinal default 8080,\n        //admin: 'Carl' //Optional default temp\n     }\n );\n \n _socket.on('message', function(object){\n    //DO something\n });\n \n _socket.on('open', function(){\n      _socket.send({\n         msg:'Hi',\n         to:'Joan',\n         protocol:'chat'\n         //all:true If ALL is TRUE, the message is send to all the user in the protocol\n      });\n });\n\n```\n*Using Shortcuts* \n```js\n \n var _shorcuts = new Shorcuts;\n \n _shorcuts.socketListen({\n    user: 'mike', // Local User\n    protocol : 'chat' // Protocol\n }, function(object){\n    //Receiving message DO something\n });\n \n _shorcuts.socketSend({\n         to: 'spike',\n         protocol : 'chat',\n         msg: 'Hi'\n })\n    \n```",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geolffreym/_B_Node.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.1.2"
+}
