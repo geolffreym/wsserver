@@ -34,7 +34,7 @@ Server Side
 -----------
 ```js
 var _http = require('http'),
-    _wsServer = require('b_wsserver');
+    _wsServer = require('wsserver');
 
 /**Http Server
  * @type {*}
