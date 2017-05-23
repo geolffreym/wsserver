@@ -1,14 +1,14 @@
 Websocket Server
 =========================
-Connection manager using socket, protocol management, customers and managers. 
+Socket connection manager, protocols and administrators.
 
 Usage
 ------
 
 Websocket Usage:
 
-The manager needs to get through a query string, the administrator, the user and the protocol. 
-This to generate a separate structure for each service provided by each protocol, you can use different protocols with different users and Administradors. A tree structure is generated. 
+The manager needs to get through a query string, the administrator, the user and the protocol.
+This to generate a separate structure for each service provided by each protocol, you can use different protocols with different users and administrators. A tree structure is generated.
 example: 
 
     {protocol} ->  {admin}  -> {client}
@@ -25,8 +25,6 @@ example:
 
 This makes it much easier to manage the behavior of each service, without affecting each other. 
 You can shut down one service, keeping active the other services without problem. 
-
-[Syrup](https://github.com/geolffreym/Syrup) is part of this implementation and has the tools necessary for the operation of this service.
 
 The default values ​​for the protocol is 'default' for the customer is 'default' and the manager is 'temp'
 
@@ -120,56 +118,4 @@ _socket.onmessage = function (e) {
   console.log('Server: ' + e.data);
 };
 
-```
-
-
-Using Syrup
-----------
-
-*Complex Process*
-```js
-
- var _socket = new Socket;
- 
- _socket.set(
-     {
-        user: 'Mike', // My local User
-        protocol: 'chat', // The protocol
-        port: '8080' // Optinal default 8080,
-        //admin: 'Carl' //Optional default temp
-     }
- );
- 
- _socket.on('message', function(object){
-    //DO something
- });
- 
- _socket.on('open', function(){
-      _socket.send({
-         msg:'Hi',
-         to:'Joan',
-         protocol:'chat'
-         //all:true If ALL is TRUE, the message is send to all the user in the protocol
-      });
- });
-
-```
-*Using Shortcuts* 
-```js
- 
- var _shorcuts = new Shorcuts;
- 
- _shorcuts.socketListen({
-    user: 'mike', // Local User
-    protocol : 'chat' // Protocol
- }, function(object){
-    //Receiving message DO something
- });
- 
- _shorcuts.socketSend({
-         to: 'spike',
-         protocol : 'chat',
-         msg: 'Hi'
- })
-    
 ```
